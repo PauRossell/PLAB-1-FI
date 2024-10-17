@@ -34,8 +34,22 @@ while read lin; do
         percent_dislikes=$(( ($dislikes*100)/$views )) 
         echo "$lin,$percent_likes,$percent_dislikes"
     fi
-done < sortida3.csv > sortida4.csv
+done < sortida3.csv > sortida.csv
 
+#Eliminació dels arxius auxiliars
+rm sortida1.csv sortida2.csv sortida3.csv
 
+#Pregunta 5
+echo "Introdueix el títol o l'identificador del vídeo que desitges buscar"
+read video
 
-
+if [ ! -f "sortida.csv" ]; then
+    echo "Error: El fitxer sortida.csv no existeix."
+else
+	match=$(grep -i "$video" sortida.csv)
+	if [ -z "$match" ]; then
+		echo "No s'han trobat coincidències per a '$video'."
+	else
+		grep "$video" sortida.csv | cut -d',' -f3,6,8-10,15-17
+	fi
+fi
